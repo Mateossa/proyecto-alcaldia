@@ -1,0 +1,35 @@
+{
+  "alto_del_toro": [
+    { "value": "sede_principal", "label": "Sede Principal" },
+    { "value": "sede_rural", "label": "Sede Rural" }
+  ],
+  "antonio_jose_de_sucre": [
+    { "value": "sede_principal", "label": "Sede Principal" },
+    { "value": "sede_centro", "label": "Sede Centro" }
+  ],
+  "basico_otun": [
+    { "value": "sede_principal", "label": "Sede Principal" },
+    { "value": "sede_otun", "label": "Sede Otún" }
+  ],
+  "boqueron": [
+    { "value": "sede_principal", "label": "Sede Principal" },
+    { "value": "sede_boqueron", "label": "Sede Boquerón" }
+  ],
+  "camilo_torres": [
+    { "value": "sede_principal", "label": "Sede Principal" }
+  ],
+  "cristo_rey": [
+    { "value": "sede_principal", "label": "Sede Principal" },
+    { "value": "sede_norte", "label": "Sede Norte" }
+  ],
+  "bernardo_lopez_perez": [
+    { "value": "sede_principal", "label": "Sede Principal" }
+  ],
+  "pablo_sexto": [
+    { "value": "sede_principal", "label": "Sede Principal" }
+  ],
+  "cartagena": [
+    { "value": "sede_principal", "label": "Sede Principal" },
+    { "value": "sede_sur", "label": "Sede Sur" }
+  ]
+}

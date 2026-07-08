@@ -1,0 +1,7 @@
+[
+  { "value": "ausentismo", "label": "Ausentismo" },
+  { "value": "permiso_academico", "label": "Permiso Académico" },
+  { "value": "permiso_administrativo", "label": "Permiso Administrativo" },
+  { "value": "incapacidad_medica", "label": "Incapacidad Médica" },
+  { "value": "licencia_especial", "label": "Licencia Especial" }
+]

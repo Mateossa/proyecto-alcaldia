@@ -1,0 +1,83 @@
+/* Se ingresan las variables tal y como se planearon en la guía de estilos */
+
+:root {
+    /* 🎨 Variables del color primario (verde institucional) */
+    --color-primary-950: #062D08;
+    --color-primary-900: #155217;
+    --color-primary-800: #186319;
+    --color-primary-700: #177E19;
+    --color-primary-600: #19A01A;
+    --color-primary-500: #25C226;
+    --color-primary-400: #4DDB4E;
+    --color-primary-300: #90EE90;
+    --color-primary-200: #BDF6BC;
+    --color-primary-100: #DEFBDD;
+    --color-primary-50:  #F1FDF0;
+
+    /* 🎨 Variables del color secundario (turquesa institucional) */
+    --color-secondary-950: #023131;
+    --color-secondary-900: #10514E;
+    --color-secondary-800: #0D625E;
+    --color-secondary-700: #0A7B75;
+    --color-secondary-600: #079A91;
+    --color-secondary-500: #0CC0B1;
+    --color-secondary-400: #40E0D0;
+    --color-secondary-300: #58F0DC;
+    --color-secondary-200: #95FAEA;
+    --color-secondary-100: #CAFDF3;
+    --color-secondary-50:  #EFFEFA;
+
+    /* 🎨 Colores institucionales adicionales */
+    --color-azul-institucional: #004884;
+    --color-amarillo-institucional: #FCDD09;
+    --color-rojo-institucional: #F80000;
+    --color-honeydew: #EEFFF2;
+    --color-beige: #FEFBE8;
+
+    /* ⚪ Base */
+    --white: #FFFFFF;
+    --black: #000000;
+
+    /* ⚫ Escala de grises (claro → oscuro) */
+    --color-gray-50:  #F6F6F6;
+    --color-gray-100: #E9E9E9;
+    --color-gray-200: #D1D1D1;
+    --color-gray-300: #B8B8B8;
+    --color-gray-400: #878787;
+    --color-gray-500: #6E6E6E;
+    --color-gray-700: #3D3D3D;
+    --color-gray-800: #242424;
+    --color-gray-900: #181818;
+    --color-gray-950: #0A0A0A;
+
+    /* 🔤 Tipografía */
+    --font-family-main: "Piazzolla", serif; /* principal */
+    --font-family-secondary: "Roboto", sans-serif; /* secundaria */
+
+    /* Pesos tipográficos */
+    --font-weight-light: 300;
+    --font-weight-semibold: 600;
+    --font-weight-extrabold: 800;
+
+    /* 📏 Tamaños tipográficos */
+    --text-fs-xxxxl: 5rem;   /* 80px */
+    --text-fs-xxxl: 4rem;    /* 64px */
+    --text-fs-big: 3.5rem;   /* 56px */
+    --text-fs-xxl: 3rem;     /* 48px */
+    --text-fs-xl:  2.5rem;   /* 40px */
+    --text-fs-lg: 2rem;      /* 32px */
+    --text-fs-mg: 1.5rem;    /* 24px */
+    --text-fs-sm: 1.25rem;   /* 20px */
+    --text-fs-xs: 1rem;      /* 16px */
+    --text-fs-xxs: 0.875rem; /* 14px */
+    --text-fs-xxxs: 0.75rem; /* 12px */
+    --text-fs-xxxxs: 0.625rem; /* 8px */
+
+    /* 🟦 Corner Radius */
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+}

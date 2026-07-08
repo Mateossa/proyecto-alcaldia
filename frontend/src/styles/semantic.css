@@ -1,0 +1,62 @@
+@import url(tokens.css);
+
+/* Roles de la interfaz */
+:root {
+  /* ************* BRAND ********* */
+    --semantic-brand: var(--color-primary-50); /* color principal del proyecto */
+    --semantic-brand-soft: var(--color-primary-100);
+    --semantic-brand-soft-v2: var(--color-primary-200);
+    --semantic-brand-hover: var(--color-primary-800); /* tono más oscuro */
+    --semantic-brand-hover-v2: var(--color-primary-900); /* tono más alto */
+    --semantic-brand-fort: var(--color-primary-950);
+    --semantic-brand-400: var(--color-primary-400);
+    --semantic-brand-700: var(--color-primary-700);
+
+    /* ************ BACKGROUND ******** */
+    --semantic-background: var(--color-primary-50); /* fondo estructural */
+    --semantic-surface: var(--white); /* modales, cards, containers */
+    --semantic-surface-v2: var(--color-primary-200); /* zonas secundarias */
+    --semantic-surface-muted: var(--color-gray-200);
+
+    --semantic-color-primary: var(--color-primary-600);
+    --semantic-color-primaryv2: var(--color-primary-400);
+    --semantic-color-secondary: var(--color-secundary-600);
+    --semantic-color-secondaryv2: var(--color-secundary-400);
+
+    /* ********* TEXT ******** */
+    --semantic-text-primary: var(--color-gray-900); /* títulos, texto base */
+    --semantic-text-secondary: var(--color-gray-700); /* textos menos dominantes */
+    --semantic-text-muted: var(--color-gray-500); /* deshabilitado */
+    --semantic-text-inverse: var(--color-gray-50); /* invertido */
+
+    /* ********* TIPOGRAFÍA ******** */
+    --semantic-font-main: var(--font-family-main);
+    --semantic-font-secondary: var(--font-family-secondary);
+
+    /* ******** VARIANTES TIPOGRAFÍA ******** */
+    --semantic-font-light: var(--font-weight-light);
+    --semantic-font-semibold: var(--font-weight-semibold);
+    --semantic-font-extrabold: var(--font-weight-extrabold);
+
+    /* ******** TAMAÑOS TIPOGRAFÍA ******** */
+    --semantic-fs-big: var(--text-fs-big);
+    --semantic-fs-lg: var(--text-fs-lg);
+    --semantic-fs-xs: var(--text-fs-xs);
+    --semantic-fs-xxs: var(--text-fs-xxs);
+    --semantic-fs-xxxs: var(--text-fs-xxxs);
+    --semantic-fs-xxxxs: var(--text-fs-xxxxs);
+    --semantic-fs-sm: var(--text-fs-sm);
+    --semantic-fs-mg: var(--text-fs-mg);
+
+    /* ********* BORDER ******** */
+    --semantic-border: var(--color-primary-800);
+    --semantic-border-strong: var(--color-primary-950);
+
+    /* ********* BORDER RADIUS ******** */
+    --semantic-br-md: var(--radius-md);  /* 8px */
+    --semantic-br-lg: var(--radius-lg);  /* 12px */
+    --semantic-br-xl: var(--radius-xl);  /* 16px */
+
+    /* ********* STATE ******** */
+    --semantic-warning: var(--color-secundary-800); /* alertas */
+}
