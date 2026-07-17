@@ -200,7 +200,6 @@ export default function ConsultasyReportes() {
                   <th className="py-1 px-2 font-semibold">Fecha</th>
                   <th className="py-1 px-2 font-semibold">Tipo</th>
                   <th className="py-1 px-2 font-semibold">Motivo</th>
-                  <th className="py-1 px-2 font-semibold">Horas Extras</th>
                   <th className="py-1 px-2 font-semibold">Estado</th>
                   <th className="py-1 px-2 font-semibold">Acciones</th>
                 </tr>

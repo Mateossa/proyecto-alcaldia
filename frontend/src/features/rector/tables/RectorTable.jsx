@@ -25,9 +25,11 @@ export default function RectorTable({
       <table className="w-full text-info-regular text-left border-collapse">
         <thead>
           <tr className="border-b border-border text-text-primary">
-            <th className="py-1.5 px-2 font-semibold">Fecha</th>
+            <th className="py-1.5 px-2 font-semibold">Fecha Registro</th>
             <th className="py-1.5 px-2 font-semibold">Documento</th>
             <th className="py-1.5 px-2 font-semibold">Motivo</th>
+            <th className="py-1.5 px-2 font-semibold">Fecha Inicio</th>
+            <th className="py-1.5 px-2 font-semibold">Fecha Fin</th>
             <th className="py-1.5 px-2 font-semibold">Anexo</th>
             <th className="py-1.5 px-2 font-semibold">Estado</th>
             <th className="py-1.5 px-2 font-semibold">Acciones</th>
@@ -36,22 +38,24 @@ export default function RectorTable({
         <tbody>
           {cargando ? (
             <tr>
-              <td colSpan={6} className="text-center py-4 text-text-muted">
+              <td colSpan={8} className="text-center py-4 text-text-muted">
                 Cargando...
               </td>
             </tr>
           ) : solicitudes.length === 0 ? (
             <tr>
-              <td colSpan={6} className="text-center py-4 text-text-muted">
+              <td colSpan={8} className="text-center py-4 text-text-muted">
                 No hay registros que coincidan con el filtro.
               </td>
             </tr>
           ) : (
             solicitudes.map((s) => (
               <tr key={s.id} className="border-b border-brand-softv2">
-                <td className="py-1.5 px-2 text-text-primary">{formatearFecha(s.fecha)}</td>
+                <td className="py-1.5 px-2 text-text-primary">{formatearFecha(s.fechaRegistro)}</td>
                 <td className="py-1.5 px-2 text-text-primary">{s.documento}</td>
                 <td className="py-1.5 px-2 text-text-primary">{s.motivo}</td>
+                <td className="py-1.5 px-2 text-text-primary">{formatearFecha(s.fechaInicio)}</td>
+                <td className="py-1.5 px-2 text-text-primary">{formatearFecha(s.fechaFin)}</td>
                 <td className="py-1.5 px-2">
                   <button
                     type="button"

@@ -1,0 +1,1 @@
+export { default as TecnicoTalentoHumanoPage } from "./pages/TecnicoTalentoHumanoPage";

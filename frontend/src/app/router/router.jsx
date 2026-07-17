@@ -13,6 +13,16 @@ import SolicitudesComputadasPage from "../../features/rector/pages/SolicitudesCo
 
 // Página de Coordinadores
 import CoordinadorPage from "../../features/coordinador/pages/CoordinadorPage";
+import RegistrarHorasExtrasPage from "../../features/coordinador/pages/RegistrarHorasExtrasPage";
+import CoordinadorReportesPage from "../../features/coordinador/pages/CoordinadorReportesPage";
+
+// Página de Talento Humano
+import TalentoHumanoPage from "../../features/talento-humano/pages/TalentoHumanoPage";
+import ConfiguracionPage from "../../features/talento-humano/pages/ConfiguracionPage";
+import CrearUsuarioPage from "../../features/talento-humano/pages/CrearUsuarioPage";
+
+// Página de Técnico Talento Humano
+import TecnicoTalentoHumanoPage from "../../features/tecnico-talento-humano/pages/TecnicoTalentoHumanoPage";
 
 // Auth
 import LoginPage from "../../features/auth/pages/LoginPage";
@@ -62,6 +72,54 @@ const router = createBrowserRouter([
         element: (
           // <ProtectedRoute rolesPermitidos={[3]}>
             <CoordinadorPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "coordinador/registrar-horas-extras",
+        element: (
+          // <ProtectedRoute rolesPermitidos={[3]}>
+            <RegistrarHorasExtrasPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "coordinador/reportes",
+        element: (
+          // <ProtectedRoute rolesPermitidos={[3]}>
+            <CoordinadorReportesPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "talento-humano",
+        element: (
+          // <ProtectedRoute rolesPermitidos={[4]}>
+            <TalentoHumanoPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "talento-humano/configuracion",
+        element: (
+          // <ProtectedRoute rolesPermitidos={[4]}>
+            <ConfiguracionPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "talento-humano/configuracion/crear-usuario",
+        element: (
+          // <ProtectedRoute rolesPermitidos={[4]}>
+            <CrearUsuarioPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "tecnico-talento-humano",
+        element: (
+          // <ProtectedRoute rolesPermitidos={[5]}>
+            <TecnicoTalentoHumanoPage />
           // </ProtectedRoute>
         ),
       },

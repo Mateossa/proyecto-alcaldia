@@ -9,11 +9,19 @@ export default function CoordinadorOptionCard({
   const headerColors = {
     primary: "bg-info",
     secondary: "bg-text-muted",
+    tertiary: "bg-primary",
   };
 
   const buttonColors = {
     primary: "bg-info hover:opacity-90 text-white",
     secondary: "bg-text-muted hover:bg-text-secondary text-white",
+    tertiary: "bg-primary hover:opacity-90 text-white",
+  };
+
+  const titleColors = {
+    primary: "var(--color-info)",
+    secondary: "var(--color-text-muted)",
+    tertiary: "var(--color-primary)",
   };
 
   return (
@@ -24,12 +32,7 @@ export default function CoordinadorOptionCard({
       <div className="p-6 flex flex-col items-center text-center gap-3">
         <h3
           className="font-main font-bold text-xl pb-3 border-b border-brand-softv2 w-full"
-          style={{
-            color:
-              variant === "secondary"
-                ? "var(--color-text-muted)"
-                : "var(--color-info)",
-          }}
+          style={{ color: titleColors[variant] }}
         >
           {title}
         </h3>

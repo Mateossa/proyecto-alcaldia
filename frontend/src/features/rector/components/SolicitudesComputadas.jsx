@@ -8,14 +8,14 @@ const ITEMS_POR_PAGINA = 5;
 
 // 🔧 Datos de ejemplo mientras no hay backend.
 const MOCK_SOLICITUDES = [
-  { id: 1, fecha: "2026-06-02", documento: "1128548648", motivo: "Cita Médica", estado: "Pendiente" },
-  { id: 2, fecha: "2026-05-28", documento: "1124855688", motivo: "Jornada adicional", estado: "Pendiente" },
-  { id: 3, fecha: "2026-05-20", documento: "1248784562", motivo: "Incapacidad", estado: "Aprobado" },
-  { id: 4, fecha: "2026-05-21", documento: "965895255", motivo: "Licencia Médica", estado: "Rechazado" },
-  { id: 5, fecha: "2026-06-14", documento: "125545864", motivo: "Evento Escolar", estado: "Pendiente" },
-  { id: 6, fecha: "2026-06-05", documento: "1189578628", motivo: "Incapacidad", estado: "Aprobado" },
-  { id: 7, fecha: "2026-06-01", documento: "1094123462", motivo: "Cita Médica", estado: "Pendiente" },
-  { id: 8, fecha: "2026-05-15", documento: "1094123463", motivo: "Jornada adicional", estado: "Rechazado" },
+  { id: 1, fechaRegistro: "2026-05-30", documento: "1128548648", motivo: "Cita Médica", fechaInicio: "2026-06-02", fechaFin: "2026-06-02", estado: "Pendiente" },
+  { id: 2, fechaRegistro: "2026-05-25", documento: "1124855688", motivo: "Jornada adicional", fechaInicio: "2026-05-28", fechaFin: "2026-05-28", estado: "Pendiente" },
+  { id: 3, fechaRegistro: "2026-05-18", documento: "1248784562", motivo: "Incapacidad", fechaInicio: "2026-05-20", fechaFin: "2026-05-20", estado: "Aprobado" },
+  { id: 4, fechaRegistro: "2026-05-19", documento: "965895255", motivo: "Licencia Médica", fechaInicio: "2026-05-21", fechaFin: "2026-05-21", estado: "Rechazado" },
+  { id: 5, fechaRegistro: "2026-06-10", documento: "125545864", motivo: "Evento Escolar", fechaInicio: "2026-06-14", fechaFin: "2026-06-14", estado: "Pendiente" },
+  { id: 6, fechaRegistro: "2026-06-03", documento: "1128905366", motivo: "Incapacidad", fechaInicio: "2026-06-05", fechaFin: "2026-06-06", estado: "Aprobado" },
+  { id: 7, fechaRegistro: "2026-05-30", documento: "1094123462", motivo: "Cita Médica", fechaInicio: "2026-06-01", fechaFin: "2026-06-01", estado: "Pendiente" },
+  { id: 8, fechaRegistro: "2026-05-13", documento: "1094123463", motivo: "Jornada adicional", fechaInicio: "2026-05-15", fechaFin: "2026-05-15", estado: "Rechazado" },
 ];
 
 const selectArrowStyle = {
@@ -57,15 +57,17 @@ export default function SolicitudesComputadas() {
   };
 
   const solicitudesFiltradas = useMemo(() => {
-    return solicitudes.filter((s) => {
-      const coincideDocumento = documento
-        ? String(s.documento || "").includes(documento)
-        : true;
-      const coincideFecha = fecha ? s.fecha === fecha : true;
-      const coincideEstado = estado ? s.estado === estado : true;
-      return coincideDocumento && coincideFecha && coincideEstado;
-    });
-  }, [solicitudes, documento, fecha, estado]);
+  return solicitudes.filter((s) => {
+    const coincideDocumento = documento
+      ? String(s.documento || "").includes(documento)
+      : true;
+    const coincideFecha = fecha
+      ? s.fechaRegistro === fecha || s.fechaInicio === fecha || s.fechaFin === fecha
+      : true;
+    const coincideEstado = estado ? s.estado === estado : true;
+    return coincideDocumento && coincideFecha && coincideEstado;
+  });
+}, [solicitudes, documento, fecha, estado]);
 
   const totalPaginas = Math.max(
     1,
