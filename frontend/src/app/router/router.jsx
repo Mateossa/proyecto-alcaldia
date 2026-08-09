@@ -3,133 +3,118 @@ import MainLayout from "../../shared/layout/MainLayout";
 import AuthLayout from "../../shared/layout/AuthLayout";
 // import ProtectedRoute from "../../shared/components/ProtectedRoute";
 
-// Páginas de docentes
+// ================= DOCENTES =================
 import DocentePage from "../../features/docentes/pages/DocentePage";
 import ConfigDocentePage from "../../features/docentes/pages/ConfigDocentePage";
 import ConsultasyReportesPage from "../../features/docentes/pages/ConsultasyReportesPage";
+import CambiarContraPage from "../../features/docentes/pages/CambiarContraPage";
 
-// Página de Rectores
+// ================= RECTOR =================
+import RectorPage from "../../features/rector/pages/RectorPage";
 import SolicitudesComputadasPage from "../../features/rector/pages/SolicitudesComputadasPage";
 
-// Página de Coordinadores
+// ================= COORDINADOR =================
 import CoordinadorPage from "../../features/coordinador/pages/CoordinadorPage";
 import RegistrarHorasExtrasPage from "../../features/coordinador/pages/RegistrarHorasExtrasPage";
 import CoordinadorReportesPage from "../../features/coordinador/pages/CoordinadorReportesPage";
 
-// Página de Talento Humano
+// ================= TALENTO HUMANO =================
 import TalentoHumanoPage from "../../features/talento-humano/pages/TalentoHumanoPage";
 import ConfiguracionPage from "../../features/talento-humano/pages/ConfiguracionPage";
 import CrearUsuarioPage from "../../features/talento-humano/pages/CrearUsuarioPage";
+// import AjustarTopesPage from "../../features/talento-humano/pages/AjustarTopesPage";
+import AjustarTopesDocentesPage from "../../features/talento-humano/pages/AjustarTopesDocentesPage";
 
-// Página de Técnico Talento Humano
+// ================= TÉCNICO TH =================
 import TecnicoTalentoHumanoPage from "../../features/tecnico-talento-humano/pages/TecnicoTalentoHumanoPage";
 
-// Auth
+// ================= AUTH =================
 import LoginPage from "../../features/auth/pages/LoginPage";
 import ForgotPasswordForm from "../../features/auth/components/ForgotPasswordForm";
 import ResetPasswordForm from "../../features/auth/components/ResetPasswordForm";
 import Loading from "../../shared/components/Loading";
-import ConfirmationPassword from "../../features/auth/components/ConfirmationPassword";
 
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
+      // ================= DOCENTES =================
       {
         path: "docentes",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[2]}>
-            <DocentePage />
-          // </ProtectedRoute>
-        ),
+        element: <DocentePage />,
       },
       {
         path: "config-docentes",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[2]}>
-            <ConfigDocentePage />
-          // </ProtectedRoute>
-        ),
+        element: <ConfigDocentePage />,
       },
       {
         path: "consultas-y-reportes",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[2]}>
-            <ConsultasyReportesPage />
-          // </ProtectedRoute>
-        ),
+        element: <ConsultasyReportesPage />,
       },
+      {
+        path: "docentes/cambiar-contrasena",
+        element: <CambiarContraPage />,
+      },
+
+      // ================= RECTOR =================
       {
         path: "rector",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[2]}>
-            <SolicitudesComputadasPage />
-          // </ProtectedRoute>
-        ),
+        element: <RectorPage />,
       },
       {
+        path: "rector/reportes",
+        element: <SolicitudesComputadasPage />,
+      },
+
+      // ================= COORDINADOR =================
+      {
         path: "coordinador",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[3]}>
-            <CoordinadorPage />
-          // </ProtectedRoute>
-        ),
+        element: <CoordinadorPage />,
       },
       {
         path: "coordinador/registrar-horas-extras",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[3]}>
-            <RegistrarHorasExtrasPage />
-          // </ProtectedRoute>
-        ),
+        element: <RegistrarHorasExtrasPage />,
       },
       {
         path: "coordinador/reportes",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[3]}>
-            <CoordinadorReportesPage />
-          // </ProtectedRoute>
-        ),
+        element: <CoordinadorReportesPage />,
       },
+
+      // ================= TALENTO HUMANO =================
       {
         path: "talento-humano",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[4]}>
-            <TalentoHumanoPage />
-          // </ProtectedRoute>
-        ),
+        element: <TalentoHumanoPage />,
       },
       {
         path: "talento-humano/configuracion",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[4]}>
-            <ConfiguracionPage />
-          // </ProtectedRoute>
-        ),
+        element: <ConfiguracionPage />,
       },
       {
         path: "talento-humano/configuracion/crear-usuario",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[4]}>
-            <CrearUsuarioPage />
-          // </ProtectedRoute>
-        ),
+        element: <CrearUsuarioPage />,
       },
+      // {
+      //   path: "talento-humano/configuracion/ajustar-topes",
+      //   element: <AjustarTopesPage />,
+      // },
+      {
+        path: "talento-humano/configuracion/ajustar-topes-docentes",
+        element: <AjustarTopesDocentesPage />,
+      },
+
+      // ================= TÉCNICO TH =================
       {
         path: "tecnico-talento-humano",
-        element: (
-          // <ProtectedRoute rolesPermitidos={[5]}>
-            <TecnicoTalentoHumanoPage />
-          // </ProtectedRoute>
-        ),
+        element: <TecnicoTalentoHumanoPage />,
       },
     ],
   },
+
   {
     element: <AuthLayout />,
     children: [
       {
-        path: "/", // ruta inicial
+        path: "/",
         element: <LoginPage />,
       },
       {
@@ -147,10 +132,6 @@ const router = createBrowserRouter([
       {
         path: "validation",
         element: <Loading />,
-      },
-      {
-        path: "validationPassword",
-        element: <ConfirmationPassword />,
       },
     ],
   },

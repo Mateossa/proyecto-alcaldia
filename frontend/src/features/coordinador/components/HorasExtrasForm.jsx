@@ -12,13 +12,14 @@ export default function HorasExtrasForm() {
   const [formData, setFormData] = useState({
     nombreServidor: "",
     numeroIdentidad: "",
-    identificacion: "",
+    nombreIE: "",
     sedeCentral: "",
     fechaInicio: "",
     fechaFin: "",
     horaInicio: "",
     horaFin: "",
     tipoPermiso: "",
+    horasSituacionAdministrativa: "",
     justificacion: "",
     soporte: null,
   });
@@ -37,13 +38,14 @@ export default function HorasExtrasForm() {
     const newErrors = {};
     if (!formData.nombreServidor) newErrors.nombreServidor = "Requerido";
     if (!formData.numeroIdentidad) newErrors.numeroIdentidad = "Requerido";
-    if (!formData.identificacion) newErrors.identificacion = "Requerido";
+    if (!formData.nombreIE) newErrors.nombreIE = "Requerido";
     if (!formData.sedeCentral) newErrors.sedeCentral = "Requerido";
     if (!formData.fechaInicio) newErrors.fechaInicio = "Requerido";
     if (!formData.fechaFin) newErrors.fechaFin = "Requerido";
     if (!formData.horaInicio) newErrors.horaInicio = "Requerido";
     if (!formData.horaFin) newErrors.horaFin = "Requerido";
     if (!formData.tipoPermiso) newErrors.tipoPermiso = "Requerido";
+    if (!formData.horasSituacionAdministrativa) newErrors.horasSituacionAdministrativa = "Requerido";
     if (!formData.justificacion) newErrors.justificacion = "Requerido";
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -63,18 +65,20 @@ export default function HorasExtrasForm() {
       >
         <div className="grid grid-cols-2 gap-x-4 gap-y-0">
           <Input label="Nombre del Servidor" placeholder="Ingrese el nombre del servidor" name="nombreServidor" value={formData.nombreServidor} onChange={handleChange} error={error.nombreServidor} />
-          <Input type="date" label="Fecha Fin" name="fechaFin" value={formData.fechaFin} onChange={handleChange} error={error.fechaFin} />
-
           <Input label="Número de identidad" placeholder="Ingrese el número de identidad" name="numeroIdentidad" value={formData.numeroIdentidad} onChange={handleChange} error={error.numeroIdentidad} />
+
+          <Select label="Nombre de la IE" name="nombreIE" options={["IE Nombre 1", "IE Nombre 2", "IE Nombre 3"]} value={formData.nombreIE} onChange={handleChange} error={error.nombreIE} />
+          <Select label="Sede Central" name="sedeCentral" options={["Sede Principal", "Sede Norte", "Sede Sur", "Sede Oriental"]} value={formData.sedeCentral} onChange={handleChange} error={error.sedeCentral} />
+
+          <Select label="Tipo de permiso" name="tipoPermiso" options={["Horas Extras"]} value={formData.tipoPermiso} onChange={handleChange} error={error.tipoPermiso} />
+          <Input type="date" label="Fecha Inicio" name="fechaInicio" value={formData.fechaInicio} onChange={handleChange} error={error.fechaInicio} />
+
+          <Input type="date" label="Fecha Fin" name="fechaFin" value={formData.fechaFin} onChange={handleChange} error={error.fechaFin} />
           <Input type="time" label="Hora Inicio" name="horaInicio" value={formData.horaInicio} onChange={handleChange} error={error.horaInicio} />
 
-          <Input label="Identificación" placeholder="Ingrese la identificación" name="identificacion" value={formData.identificacion} onChange={handleChange} error={error.identificacion} />
           <Input type="time" label="Hora fin" name="horaFin" value={formData.horaFin} onChange={handleChange} error={error.horaFin} />
+          <Input type="number" min="0" label="Horas extras por situación administrativa" placeholder="Ingrese las horas" name="horasSituacionAdministrativa" value={formData.horasSituacionAdministrativa} onChange={handleChange} error={error.horasSituacionAdministrativa} />
 
-          <Select label="Sede Central" name="sedeCentral" options={["Sede Principal", "Sede Norte", "Sede Sur", "Sede Oriental"]} value={formData.sedeCentral} onChange={handleChange} error={error.sedeCentral} />
-          <Select label="Tipo de permiso" name="tipoPermiso" options={["Horas Extras"]} value={formData.tipoPermiso} onChange={handleChange} error={error.tipoPermiso} />
-
-          <Input type="date" label="Fecha Inicio" name="fechaInicio" value={formData.fechaInicio} onChange={handleChange} error={error.fechaInicio} />
           <Input label="Justificación" placeholder="Ingrese la justificación" name="justificacion" value={formData.justificacion} onChange={handleChange} error={error.justificacion} />
         </div>
 

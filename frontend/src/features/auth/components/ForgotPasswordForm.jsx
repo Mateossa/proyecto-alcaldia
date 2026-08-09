@@ -53,7 +53,8 @@ export default function ForgotPasswordForm() {
         <form onSubmit={handleSubmit}>
           <div className="grid text-main justify-items-center text-main">
             <LockKeyhole className="flex items-center h-12 w-12 stroke-brand-hover" />
-            <h1 className="text-brand-hover font-extrabold text-general-title">
+            <h1 className="text-general-title font-extrabold text-center leading-tight"
+                style={{ color: "var(--color-brand-fort)" }} >
               Recuperar contraseña
             </h1>
             <p className="text-secondary text-info-general text-center font-semibold py-6">

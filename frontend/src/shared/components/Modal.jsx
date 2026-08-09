@@ -13,11 +13,11 @@ export default function Modal({ children, logo, onClose }) {
 
         <p className="flex-1">{children}</p>
 
-        <button 
+        <button
           onClick={onClose}
-          className="absolute top-2 right-4 text-small-text text-black/60 cursor-pointer"
+          className="absolute top-3 right-4 text-lg font-bold text-gray-500 hover:text-black cursor-pointer"
         >
-          X
+          ✕
         </button>
 
       </div>

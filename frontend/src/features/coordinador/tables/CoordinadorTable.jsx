@@ -14,6 +14,7 @@ const formatearFecha = (fechaStr) => {
 export default function CoordinadorTable({ solicitudes, cargando, onDescargar, mostrarHoras = false }) {
   const etiquetaInicio = mostrarHoras ? "Hora Inicio" : "Fecha Inicio";
   const etiquetaFin = mostrarHoras ? "Hora Fin" : "Fecha Fin";
+  const totalColumnas = mostrarHoras ? 8 : 7;
 
   return (
     <div className="overflow-x-auto">
@@ -25,6 +26,9 @@ export default function CoordinadorTable({ solicitudes, cargando, onDescargar, m
             <th className="py-1 px-2 font-semibold">Motivo</th>
             <th className="py-1 px-2 font-semibold">{etiquetaInicio}</th>
             <th className="py-1 px-2 font-semibold">{etiquetaFin}</th>
+            {mostrarHoras && (
+              <th className="py-1 px-2 font-semibold">Situación Administrativa</th>
+            )}
             <th className="py-1 px-2 font-semibold">Estado</th>
             <th className="py-1 px-2 font-semibold">Acciones</th>
           </tr>
@@ -32,13 +36,13 @@ export default function CoordinadorTable({ solicitudes, cargando, onDescargar, m
         <tbody>
           {cargando ? (
             <tr>
-              <td colSpan={7} className="text-center py-3 text-text-muted">
+              <td colSpan={totalColumnas} className="text-center py-3 text-text-muted">
                 Cargando...
               </td>
             </tr>
           ) : solicitudes.length === 0 ? (
             <tr>
-              <td colSpan={7} className="text-center py-3 text-text-muted">
+              <td colSpan={totalColumnas} className="text-center py-3 text-text-muted">
                 No hay registros que coincidan con el filtro.
               </td>
             </tr>
@@ -57,6 +61,9 @@ export default function CoordinadorTable({ solicitudes, cargando, onDescargar, m
                   <td className="py-1 px-2 text-text-primary">{s.motivo}</td>
                   <td className="py-1 px-2 text-text-primary">{valorInicio}</td>
                   <td className="py-1 px-2 text-text-primary">{valorFin}</td>
+                  {mostrarHoras && (
+                    <td className="py-1 px-2 text-text-primary">{s.situacionAdministrativa || "—"}</td>
+                  )}
                   <td className={`py-1 px-2 ${ESTADO_STYLES[s.estado] || ""}`}>{s.estado}</td>
                   <td className="py-1 px-2">
                     <button

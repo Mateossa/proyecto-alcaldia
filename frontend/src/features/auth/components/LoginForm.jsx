@@ -3,46 +3,128 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const MOCK_USERS = {
-  "1000000001": { password: "1234", rol: 1, nombre: "Docente Demo" },
-  "1000000002": { password: "1234", rol: 2, nombre: "Rector Demo" },
-  "1000000003": { password: "1234", rol: 3, nombre: "Coordinador Demo" },
-  "1000000004": { password: "1234", rol: 4, nombre: "Talento Humano Demo" },
-  "1000000005": { password: "1234", rol: 5, nombre: "Técnico Talento Humano Demo" },
+  "1000000001": {
+    password: "1234",
+    rol: 1,
+    nombre: "Docente Demo",
+    debe_cambiar_password: true,
+  },
+  "1000000002": {
+    password: "1234",
+    rol: 2,
+    nombre: "Rector Demo",
+    debe_cambiar_password: false,
+  },
+  "1000000003": {
+    password: "1234",
+    rol: 3,
+    nombre: "Coordinador Demo",
+    debe_cambiar_password: false,
+  },
+  "1000000004": {
+    password: "1234",
+    rol: 4,
+    nombre: "Talento Humano Demo",
+    debe_cambiar_password: false,
+  },
+  "1000000005": {
+    password: "1234",
+    rol: 5,
+    nombre: "Técnico Talento Humano Demo",
+    debe_cambiar_password: false,
+  },
 };
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ numero_documento: "", password: "" });
+
+  const [formData, setFormData] = useState({
+    numero_documento: "",
+    password: "",
+  });
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const newErrors = {};
-    if (!formData.numero_documento) newErrors.numero_documento = "El número de documento es obligatorio";
-    if (!formData.password) newErrors.password = "La contraseña es obligatoria";
+
+    if (!formData.numero_documento) {
+      newErrors.numero_documento =
+        "El número de documento es obligatorio";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "La contraseña es obligatoria";
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
     const user = MOCK_USERS[formData.numero_documento];
+
     if (!user || user.password !== formData.password) {
-      setErrors({ password: "Credenciales inválidas" });
+      setErrors({
+        password: "Credenciales inválidas",
+      });
       return;
     }
 
+    // Guardamos usuario logueado
     localStorage.setItem("user", JSON.stringify(user));
 
-    if (user.rol === 2) navigate("/rector");
-    else if (user.rol === 3) navigate("/coordinador");
-    else if (user.rol === 4) navigate("/talento-humano");
-    else if (user.rol === 5) navigate("/tecnico-talento-humano");
-    else navigate("/docentes");
+
+    // DOCENTE
+    if (user.rol === 1) {
+      if (user.debe_cambiar_password) {
+        navigate("/docentes/cambiar-contrasena");
+      } else {
+        navigate("/docentes");
+      }
+      return;
+    }
+
+
+    // RECTOR
+    if (user.rol === 2) {
+      navigate("/rector");
+      return;
+    }
+
+
+    // COORDINADOR
+    if (user.rol === 3) {
+      navigate("/coordinador");
+      return;
+    }
+
+
+    // TALENTO HUMANO
+    if (user.rol === 4) {
+      navigate("/talento-humano");
+      return;
+    }
+
+
+    // TECNICO TALENTO HUMANO
+    if (user.rol === 5) {
+      navigate("/tecnico-talento-humano");
+      return;
+    }
+
+    navigate("/");
   };
 
   return (
@@ -51,15 +133,6 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
         className="relative px-6 py-12 grid grid-cols-1 gap-2 bg-white shadow-2xl ring-1 ring-brand-soft/80 rounded-xl font-main w-94 h-auto"
       >
-        {/* Logo arriba a la izquierda */}
-        <div className="flex justify-start mb-4">
-          <img
-            src="/images/logo_azul_alcaldia.png"
-            alt="Logo GOV.CO"
-            className="h-10"
-          />
-        </div>
-
         <h1
           className="text-general-title font-extrabold text-center"
           style={{ color: "var(--color-brand-fort)" }}

@@ -9,30 +9,28 @@ const ITEMS_POR_PAGINA = 5;
 // 🔧 Datos de ejemplo mientras no hay backend.
 // Ausentismo usa fechaInicio/fechaFin. Horas Extras usa horaInicio/horaFin.
 const MOCK_AUSENTISMO = [
-  // Ausentismo
   { id: 1, fechaRegistro: "2026-05-30", documento: "1128548648", motivo: "Cita Médica", tipo: "Ausentismo", fechaInicio: "2026-06-02", fechaFin: "2026-06-02", estado: "Pendiente" },
   { id: 2, fechaRegistro: "2026-05-25", documento: "1124855688", motivo: "Cobertura de turno", tipo: "Ausentismo", fechaInicio: "2026-05-16", fechaFin: "2026-05-04", estado: "Aprobado" },
   { id: 3, fechaRegistro: "2026-05-18", documento: "1248784562", motivo: "Incapacidad", tipo: "Ausentismo", fechaInicio: "2026-05-20", fechaFin: "2026-05-22", estado: "Pendiente" },
   { id: 4, fechaRegistro: "2026-05-19", documento: "965895255", motivo: "Licencia Médica", tipo: "Ausentismo", fechaInicio: "2026-05-21", fechaFin: "2026-05-21", estado: "Rechazado" },
   { id: 5, fechaRegistro: "2026-06-10", documento: "125545864", motivo: "Evento institucional", tipo: "Ausentismo", fechaInicio: "2026-12-16", fechaFin: "2026-06-20", estado: "Rechazado" },
   { id: 6, fechaRegistro: "2026-06-03", documento: "1189578628", motivo: "Incapacidad", tipo: "Ausentismo", fechaInicio: "2026-06-05", fechaFin: "2026-06-07", estado: "Aprobado" },
-]
+];
 
 const MOCK_HORAS_EXTRAS = [
-  // Horas Extras
-  { id: 7, fechaRegistro: "2026-07-10", documento: "123456789", motivo: "Revisión de informes", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", estado: "Pendiente" },
-  { id: 8, fechaRegistro: "2026-07-11", documento: "987654321", motivo: "Capacitación docente", tipo: "Horas Extras", horaInicio: "19:00", horaFin: "21:00", estado: "Aprobado" },
-  { id: 9, fechaRegistro: "2026-07-12", documento: "456123789", motivo: "Reunión extraordinaria", tipo: "Horas Extras", horaInicio: "17:30", horaFin: "19:00", estado: "Rechazado" },
-  { id: 17, fechaRegistro: "2026-07-10", documento: "123456789", motivo: "Revisión de informes", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", estado: "Pendiente" },
-  { id: 18, fechaRegistro: "2026-07-11", documento: "987654321", motivo: "Capacitación docente", tipo: "Horas Extras", horaInicio: "19:00", horaFin: "21:00", estado: "Aprobado" },
-  { id: 19, fechaRegistro: "2026-07-12", documento: "456123789", motivo: "Reunión extraordinaria", tipo: "Horas Extras", horaInicio: "17:30", horaFin: "19:00", estado: "Rechazado" },
-  { id: 10, fechaRegistro: "2026-07-13", documento: "852741963", motivo: "Actualización de plataforma", tipo: "Horas Extras", horaInicio: "20:00", horaFin: "22:00", estado: "Pendiente" },
-  { id: 11, fechaRegistro: "2026-07-14", documento: "963258741", motivo: "Soporte técnico nocturno", tipo: "Horas Extras", horaInicio: "21:00", horaFin: "23:00", estado: "Aprobado" },
-  { id: 12, fechaRegistro: "2026-07-15", documento: "741852963", motivo: "Revisión presupuestal", tipo: "Horas Extras", horaInicio: "18:30", horaFin: "20:30", estado: "Pendiente" },
-  { id: 13, fechaRegistro: "2026-07-16", documento: "159753486", motivo: "Capacitación en seguridad", tipo: "Horas Extras", horaInicio: "19:30", horaFin: "21:30", estado: "Rechazado" },
-  { id: 14, fechaRegistro: "2026-07-17", documento: "357951456", motivo: "Reunión con proveedores", tipo: "Horas Extras", horaInicio: "17:00", horaFin: "19:00", estado: "Aprobado" },
-  { id: 15, fechaRegistro: "2026-07-18", documento: "258963147", motivo: "Auditoría interna", tipo: "Horas Extras", horaInicio: "20:00", horaFin: "22:00", estado: "Pendiente" },
-  { id: 16, fechaRegistro: "2026-07-19", documento: "654789321", motivo: "Revisión de contratos", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", estado: "Aprobado" },
+  { id: 7, fechaRegistro: "2026-07-10", documento: "123456789", motivo: "Revisión de informes", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
+  { id: 8, fechaRegistro: "2026-07-11", documento: "987654321", motivo: "Capacitación docente", tipo: "Horas Extras", horaInicio: "19:00", horaFin: "21:00", situacionAdministrativa: "En servicio activo", estado: "Aprobado" },
+  { id: 9, fechaRegistro: "2026-07-12", documento: "456123789", motivo: "Reunión extraordinaria", tipo: "Horas Extras", horaInicio: "17:30", horaFin: "19:00", situacionAdministrativa: "Comisión de servicios", estado: "Rechazado" },
+  { id: 10, fechaRegistro: "2026-07-13", documento: "852741963", motivo: "Actualización de plataforma", tipo: "Horas Extras", horaInicio: "20:00", horaFin: "22:00", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
+  { id: 11, fechaRegistro: "2026-07-14", documento: "963258741", motivo: "Soporte técnico nocturno", tipo: "Horas Extras", horaInicio: "21:00", horaFin: "23:00", situacionAdministrativa: "Encargo", estado: "Aprobado" },
+  { id: 12, fechaRegistro: "2026-07-15", documento: "741852963", motivo: "Revisión presupuestal", tipo: "Horas Extras", horaInicio: "18:30", horaFin: "20:30", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
+  { id: 13, fechaRegistro: "2026-07-16", documento: "159753486", motivo: "Capacitación en seguridad", tipo: "Horas Extras", horaInicio: "19:30", horaFin: "21:30", situacionAdministrativa: "Comisión de servicios", estado: "Rechazado" },
+  { id: 14, fechaRegistro: "2026-07-17", documento: "357951456", motivo: "Reunión con proveedores", tipo: "Horas Extras", horaInicio: "17:00", horaFin: "19:00", situacionAdministrativa: "En servicio activo", estado: "Aprobado" },
+  { id: 15, fechaRegistro: "2026-07-18", documento: "258963147", motivo: "Auditoría interna", tipo: "Horas Extras", horaInicio: "20:00", horaFin: "22:00", situacionAdministrativa: "Encargo", estado: "Pendiente" },
+  { id: 16, fechaRegistro: "2026-07-19", documento: "654789321", motivo: "Revisión de contratos", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", situacionAdministrativa: "En servicio activo", estado: "Aprobado" },
+  { id: 17, fechaRegistro: "2026-07-10", documento: "123456789", motivo: "Revisión de informes", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
+  { id: 18, fechaRegistro: "2026-07-11", documento: "987654321", motivo: "Capacitación docente", tipo: "Horas Extras", horaInicio: "19:00", horaFin: "21:00", situacionAdministrativa: "Comisión de servicios", estado: "Aprobado" },
+  { id: 19, fechaRegistro: "2026-07-12", documento: "456123789", motivo: "Reunión extraordinaria", tipo: "Horas Extras", horaInicio: "17:30", horaFin: "19:00", situacionAdministrativa: "En servicio activo", estado: "Rechazado" },
 ];
 
 const selectArrowStyle = {
@@ -41,44 +39,77 @@ const selectArrowStyle = {
   backgroundSize: "0.9rem",
 };
 
+const getColumnasDisponibles = (mostrarHoras) => [
+  { key: "fechaRegistro", label: "Fecha Registro" },
+  { key: "documento", label: "Documento" },
+  { key: "motivo", label: "Motivo" },
+  { key: "inicio", label: mostrarHoras ? "Hora Inicio" : "Fecha Inicio" },
+  { key: "fin", label: mostrarHoras ? "Hora Fin" : "Fecha Fin" },
+  ...(mostrarHoras ? [{ key: "situacionAdministrativa", label: "Situación Administrativa" }] : []),
+  { key: "estado", label: "Estado" },
+];
+
 export default function SolicitudesComputadas() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-    // Tipo viene preseleccionado desde el botón "Ver Horas Extras" del panel/formulario
   const tipoParam = searchParams.get("tipo") || "";
   const mostrarHoras = tipoParam === "Horas Extras";
 
-  // 🔧 Cuando tengas backend, cambia esto por useState([]) + useEffect con el fetch
-  const [solicitudes] = useState(tipoParam === "Horas Extras" ? MOCK_HORAS_EXTRAS : MOCK_AUSENTISMO);
+  const [solicitudes] = useState(mostrarHoras ? MOCK_HORAS_EXTRAS : MOCK_AUSENTISMO);
   const [cargando] = useState(false);
   const [error] = useState(null);
 
-  // Filtros
   const [documento, setDocumento] = useState("");
   const [fecha, setFecha] = useState("");
   const [estado, setEstado] = useState("");
 
-  // Paginación
   const [paginaActual, setPaginaActual] = useState(1);
+
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [formatoExport, setFormatoExport] = useState(null);
+  const columnasDisponibles = getColumnasDisponibles(mostrarHoras);
+  const [columnasSeleccionadas, setColumnasSeleccionadas] = useState(
+    columnasDisponibles.reduce((acc, col) => ({ ...acc, [col.key]: true }), {})
+  );
 
   const handleFiltrar = () => {
     setPaginaActual(1);
   };
 
   const handleDescargar = (id) => {
-    // 🔧 Cuando tengas backend: fetch(`/api/solicitudes-computadas/${id}/descargar/`)
     alert(`Descargar solicitud #${id} (pendiente de conectar con backend)`);
   };
 
-  const handleExportarPDF = () => {
-    // 🔧 Cuando tengas backend: fetch(`/api/horas-extras/exportar/pdf/`)
-    alert("Exportar a PDF (pendiente de conectar con backend)");
+  const abrirModalExport = (formato) => {
+    setFormatoExport(formato);
+    setShowExportModal(true);
   };
 
-  const handleExportarExcel = () => {
-    // 🔧 Cuando tengas backend: fetch(`/api/horas-extras/exportar/excel/`)
-    alert("Exportar a Excel (pendiente de conectar con backend)");
+  const toggleColumna = (key) => {
+    setColumnasSeleccionadas((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const toggleTodas = (marcar) => {
+    setColumnasSeleccionadas(
+      columnasDisponibles.reduce((acc, col) => ({ ...acc, [col.key]: marcar }), {})
+    );
+  };
+
+  const confirmarExportacion = () => {
+    const columnasElegidas = columnasDisponibles
+      .filter((col) => columnasSeleccionadas[col.key])
+      .map((col) => col.label);
+
+    if (columnasElegidas.length === 0) {
+      alert("Selecciona al menos una columna para exportar.");
+      return;
+    }
+
+    alert(
+      `Exportar a ${formatoExport === "pdf" ? "PDF" : "Excel"} con las columnas:\n${columnasElegidas.join(", ")}`
+    );
+    setShowExportModal(false);
   };
 
   const solicitudesFiltradas = useMemo(() => {
@@ -112,25 +143,13 @@ export default function SolicitudesComputadas() {
   return (
     <div className="w-full font-secondary">
       <div className="flex flex-col md:flex-row gap-3 items-start">
-        {/* Panel de filtros */}
         <aside className="bg-surface rounded-[var(--border-main-container)] shadow-md p-3 w-full md:w-56 shrink-0">
           <button
             type="button"
             className="w-full flex items-center justify-center gap-2 border border-border rounded-[var(--border-buttons)] py-1.5 text-info-regular text-text-secondary mb-2 hover:bg-brand"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4h18M6 8h12M10 12h4M11 16h2"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M6 8h12M10 12h4M11 16h2" />
             </svg>
             Filtrar por
           </button>
@@ -159,9 +178,7 @@ export default function SolicitudesComputadas() {
             >
               <option value="">Estado</option>
               {ESTADOS.map((e) => (
-                <option key={e} value={e}>
-                  {e}
-                </option>
+                <option key={e} value={e}>{e}</option>
               ))}
             </select>
 
@@ -171,54 +188,28 @@ export default function SolicitudesComputadas() {
           </div>
         </aside>
 
-        {/* Tabla principal */}
         <section className="bg-beige rounded-[var(--border-main-container)] shadow-md p-3 flex-1 w-full">
           <div className="flex items-center justify-between gap-2 mb-2">
             <div className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                style={{ color: "var(--color-text-primary)" }}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" style={{ color: "var(--color-text-primary)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              <h2
-                className="text-info-general font-main font-semibold"
-                style={{ color: "var(--color-text-primary)" }}
-              >
+              <h2 className="text-info-general font-main font-semibold" style={{ color: "var(--color-text-primary)" }}>
                 Solicitudes computadas{tipoParam ? ` · ${tipoParam}` : ""}
               </h2>
             </div>
 
             <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={handleExportarPDF}
-                className="px-4 py-1.5 rounded-[var(--border-buttons)] border border-primary text-primary text-info-regular font-semibold hover:bg-brand-soft transition-colors"
-              >
+              <button type="button" onClick={() => abrirModalExport("pdf")} className="px-4 py-1.5 rounded-[var(--border-buttons)] border border-primary text-primary text-info-regular font-semibold hover:bg-brand-soft transition-colors">
                 Exportar PDF
               </button>
-              <button
-                type="button"
-                onClick={handleExportarExcel}
-                className="px-4 py-1.5 rounded-[var(--border-buttons)] border border-primary text-primary text-info-regular font-semibold hover:bg-brand-soft transition-colors"
-              >
+              <button type="button" onClick={() => abrirModalExport("excel")} className="px-4 py-1.5 rounded-[var(--border-buttons)] border border-primary text-primary text-info-regular font-semibold hover:bg-brand-soft transition-colors">
                 Exportar Excel
               </button>
             </div>
           </div>
 
-          {error && (
-            <p className="text-error text-info-regular mb-2">{error}</p>
-          )}
+          {error && <p className="text-error text-info-regular mb-2">{error}</p>}
 
           <CoordinadorTable
             solicitudes={solicitudesPagina}
@@ -233,12 +224,7 @@ export default function SolicitudesComputadas() {
             </Button>
 
             <div className="flex items-center gap-1 text-info-regular">
-              <button
-                type="button"
-                onClick={irPaginaAnterior}
-                disabled={paginaActual === 1}
-                className="px-2 py-1 rounded-[var(--border-buttons)] disabled:opacity-40 text-text-secondary"
-              >
+              <button type="button" onClick={irPaginaAnterior} disabled={paginaActual === 1} className="px-2 py-1 rounded-[var(--border-buttons)] disabled:opacity-40 text-text-secondary">
                 ‹
               </button>
               {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((num) => (
@@ -247,26 +233,78 @@ export default function SolicitudesComputadas() {
                   type="button"
                   onClick={() => setPaginaActual(num)}
                   className={`px-2 py-1 rounded-[var(--border-buttons)] ${
-                    paginaActual === num
-                      ? "font-extrabold text-brand-hoverv2"
-                      : "text-text-muted hover:text-primary"
+                    paginaActual === num ? "font-extrabold text-brand-hoverv2" : "text-text-muted hover:text-primary"
                   }`}
                 >
                   {num}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={irPaginaSiguiente}
-                disabled={paginaActual === totalPaginas}
-                className="px-2 py-1 rounded-[var(--border-buttons)] disabled:opacity-40 text-text-secondary"
-              >
+              <button type="button" onClick={irPaginaSiguiente} disabled={paginaActual === totalPaginas} className="px-2 py-1 rounded-[var(--border-buttons)] disabled:opacity-40 text-text-secondary">
                 ›
               </button>
             </div>
           </div>
         </section>
       </div>
+
+      {showExportModal && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-20 p-4"
+          onClick={() => setShowExportModal(false)}
+        >
+          <div
+            className="relative w-full max-w-sm bg-white rounded-2xl shadow-lg p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowExportModal(false)}
+              className="absolute top-3 right-4 text-text-muted hover:text-text-primary text-lg cursor-pointer"
+            >
+              ×
+            </button>
+
+            <h3 className="font-main font-bold text-info-general text-center mb-1" style={{ color: "var(--color-brand-fort)" }}>
+              Exportar a {formatoExport === "pdf" ? "PDF" : "Excel"}
+            </h3>
+            <p className="text-info-regular text-text-secondary text-center mb-4">
+              Selecciona los datos que quieres incluir:
+            </p>
+
+            <div className="flex gap-3 justify-center mb-3 text-info-regular">
+              <button type="button" onClick={() => toggleTodas(true)} className="text-info hover:underline font-semibold">
+                Seleccionar todo
+              </button>
+              <button type="button" onClick={() => toggleTodas(false)} className="text-text-muted hover:underline font-semibold">
+                Quitar todo
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2 mb-4">
+              {columnasDisponibles.map((col) => (
+                <label key={col.key} className="flex items-center gap-2 text-info-regular text-text-primary cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={columnasSeleccionadas[col.key] || false}
+                    onChange={() => toggleColumna(col.key)}
+                    className="h-4 w-4 accent-primary"
+                  />
+                  {col.label}
+                </label>
+              ))}
+            </div>
+
+            <div className="flex gap-3 justify-center">
+              <Button variant="secondary" size="sm" onClick={() => setShowExportModal(false)}>
+                Cancelar
+              </Button>
+              <Button variant="primary" size="sm" onClick={confirmarExportacion}>
+                Exportar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

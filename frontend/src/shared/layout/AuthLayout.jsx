@@ -26,7 +26,7 @@ export default function AuthLayout() {
 
       {/* Logo GOV.CO arriba a la izquierda */}
       <div className="absolute top-4 left-4 z-10">
-        <img src="/images/logo_footer_alcaldia.png" alt="GOV.CO" className="h-10" />
+        <img src="/images/logo_azul_alcaldia.png" alt="GOV.CO" className="h-10" />
       </div>
 
       {/* Contenido centrado */}
