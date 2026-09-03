@@ -2,37 +2,14 @@ import { Button, Input } from "@/shared/components";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const MOCK_USERS = {
-  "1000000001": {
-    password: "1234",
-    rol: 1,
-    nombre: "Docente Demo",
-    debe_cambiar_password: true,
-  },
-  "1000000002": {
-    password: "1234",
-    rol: 2,
-    nombre: "Rector Demo",
-    debe_cambiar_password: false,
-  },
-  "1000000003": {
-    password: "1234",
-    rol: 3,
-    nombre: "Coordinador Demo",
-    debe_cambiar_password: false,
-  },
-  "1000000004": {
-    password: "1234",
-    rol: 4,
-    nombre: "Talento Humano Demo",
-    debe_cambiar_password: false,
-  },
-  "1000000005": {
-    password: "1234",
-    rol: 5,
-    nombre: "Técnico Talento Humano Demo",
-    debe_cambiar_password: false,
-  },
+const API_URL = "http://127.0.0.1:8000/api";
+
+const ROL_ROUTES = {
+  DOCENTE: "/docentes",
+  RECTOR: "/rector",
+  COORDINADOR: "/coordinador",
+  TALENTO_HUMANO: "/talento-humano",
+  TECNICO_TALENTO_HUMANO: "/tecnico-talento-humano",
 };
 
 export default function LoginForm() {
@@ -44,6 +21,7 @@ export default function LoginForm() {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,14 +32,13 @@ export default function LoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
 
     if (!formData.numero_documento) {
-      newErrors.numero_documento =
-        "El número de documento es obligatorio";
+      newErrors.numero_documento = "El número de documento es obligatorio";
     }
 
     if (!formData.password) {
@@ -73,58 +50,46 @@ export default function LoginForm() {
       return;
     }
 
-    const user = MOCK_USERS[formData.numero_documento];
+    setLoading(true);
+    setErrors({});
 
-    if (!user || user.password !== formData.password) {
-      setErrors({
-        password: "Credenciales inválidas",
+    try {
+      const response = await fetch(`${API_URL}/login/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          numero_documento: formData.numero_documento,
+          password: formData.password,
+        }),
       });
-      return;
-    }
 
-    // Guardamos usuario logueado
-    localStorage.setItem("user", JSON.stringify(user));
-
-
-    // DOCENTE
-    if (user.rol === 1) {
-      if (user.debe_cambiar_password) {
-        navigate("/docentes/cambiar-contrasena");
-      } else {
-        navigate("/docentes");
+      if (!response.ok) {
+        setErrors({ password: "Credenciales inválidas" });
+        setLoading(false);
+        return;
       }
-      return;
+
+      const data = await response.json();
+
+      // Guardamos tokens y usuario logueado
+      localStorage.setItem("access", data.access);
+      localStorage.setItem("refresh", data.refresh);
+      localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
+      const { rol, debe_cambiar_contrasena } = data.usuario;
+
+      // DOCENTE con contraseña por cambiar tiene su propia ruta
+      if (rol === "DOCENTE" && debe_cambiar_contrasena) {
+        navigate("/docentes/cambiar-contrasena");
+        return;
+      }
+
+      navigate(ROL_ROUTES[rol] ?? "/");
+    } catch (err) {
+      setErrors({ password: "No se pudo conectar con el servidor" });
+    } finally {
+      setLoading(false);
     }
-
-
-    // RECTOR
-    if (user.rol === 2) {
-      navigate("/rector");
-      return;
-    }
-
-
-    // COORDINADOR
-    if (user.rol === 3) {
-      navigate("/coordinador");
-      return;
-    }
-
-
-    // TALENTO HUMANO
-    if (user.rol === 4) {
-      navigate("/talento-humano");
-      return;
-    }
-
-
-    // TECNICO TALENTO HUMANO
-    if (user.rol === 5) {
-      navigate("/tecnico-talento-humano");
-      return;
-    }
-
-    navigate("/");
   };
 
   return (
@@ -167,8 +132,8 @@ export default function LoginForm() {
         </Link>
 
         <div className="flex items-center justify-center mt-4">
-          <Button variant="secondary" size="md" type="submit">
-            Ingresar
+          <Button variant="secondary" size="md" type="submit" disabled={loading}>
+            {loading ? "Ingresando..." : "Ingresar"}
           </Button>
         </div>
       </form>

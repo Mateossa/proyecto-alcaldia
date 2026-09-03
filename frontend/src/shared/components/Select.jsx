@@ -7,6 +7,12 @@ export default function Select({
   onChange,
   disabled,
 }) {
+  const normalizedOptions = options.map((opt) =>
+    typeof opt === "object" && opt !== null
+      ? opt
+      : { value: opt, label: opt }
+  );
+
   return (
     <div className="w-full flex flex-col">
       {label && (
@@ -43,8 +49,8 @@ export default function Select({
           `}
         >
           <option disabled value="">Seleccione una opción</option>
-          {options.map((opt, i) => (
-            <option key={i} value={opt}>{opt}</option>
+          {normalizedOptions.map((opt, i) => (
+            <option key={i} value={opt.value}>{opt.label}</option>
           ))}
         </select>
 
