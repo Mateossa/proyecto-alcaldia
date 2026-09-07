@@ -2,8 +2,16 @@ import { useState, useMemo, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../../../shared/components/Button";
 
+const API_URL = "http://127.0.0.1:8000/api";
+
 const ESTADOS = ["Pendiente", "Aprobado", "Rechazado"];
 const TIPOS = ["Ausentismo", "Horas Extras"];
+
+const ESTADO_LABELS = {
+  PENDIENTE: "Pendiente",
+  APROBADO: "Aprobado",
+  RECHAZADO: "Rechazado",
+};
 
 const ESTADO_STYLES = {
   Pendiente: "text-warning font-semibold",
@@ -12,20 +20,6 @@ const ESTADO_STYLES = {
 };
 
 const ITEMS_POR_PAGINA = 5;
-const MOCK_SOLICITUDES = [
-  { id: 1, fecha: "2026-06-02", tipo: "Ausentismo", motivo: "Cita Médica", horas_extras: 10, estado: "Pendiente", numero_documento: "1094123456" },
-  { id: 9, fecha: "2026-06-20", tipo: "Horas Extras", motivo: "Licencia Médica", horas_extras: 20, estado: "Rechazado", numero_documento: "1553598487" },
-  { id: 2, fecha: "2026-05-28", tipo: "Horas Extras", motivo: "Jornada adicional", horas_extras: 2, estado: "Aprobado", numero_documento: "1094123457" },
-  { id: 10, fecha: "2026-05-31", tipo: "Ausentismo", motivo: "Jornada adicional", horas_extras: 8, estado: "Aprobado", numero_documento: "1154854848" },
-  { id: 3, fecha: "2026-05-20", tipo: "Ausentismo", motivo: "Incapacidad", horas_extras: 18, estado: "Pendiente", numero_documento: "1094123458" },
-  { id: 4, fecha: "2026-05-21", tipo: "Horas Extras", motivo: "Licencia Médica", horas_extras: 5, estado: "Rechazado", numero_documento: "1094123459" },
-  { id: 12, fecha: "2026-05-21", tipo: "Horas Extras", motivo: "Licencia Médica", horas_extras: 5, estado: "Aprobado", numero_documento: "1128905361" },
-  { id: 5, fecha: "2026-06-14", tipo: "Horas Extras", motivo: "Evento Escolar", horas_extras: 15, estado: "Rechazado", numero_documento: "1094123460" },
-  { id: 11, fecha: "2026-06-18", tipo: "Horas Extras", motivo: "Jornada adicional", horas_extras: 20, estado: "Rechazado", numero_documento: "1482846956" },
-  { id: 6, fecha: "2026-06-05", tipo: "Ausentismo", motivo: "Incapacidad", horas_extras: 22, estado: "Aprobado", numero_documento: "1094123461" },
-  { id: 7, fecha: "2026-06-01", tipo: "Ausentismo", motivo: "Cita Médica", horas_extras: 8, estado: "Pendiente", numero_documento: "1094123462" },
-  { id: 8, fecha: "2026-05-15", tipo: "Horas Extras", motivo: "Jornada adicional", horas_extras: 4, estado: "Aprobado", numero_documento: "1094123463" },
-];
 
 const selectArrowStyle = {
   backgroundImage:
@@ -33,36 +27,90 @@ const selectArrowStyle = {
   backgroundSize: "0.9rem",
 };
 
+function calcularHorasAusentismo(horaInicio, horaFin) {
+  if (!horaInicio || !horaFin) return "-";
+  const [h1, m1] = horaInicio.split(":").map(Number);
+  const [h2, m2] = horaFin.split(":").map(Number);
+  const minutos = h2 * 60 + m2 - (h1 * 60 + m1);
+  if (minutos <= 0) return "-";
+  return (minutos / 60).toFixed(1);
+}
+
 export default function ConsultasyReportes() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // 🔧 Cuando tengas backend, cambia esto por useState([]) + useEffect con el fetch
-  const [solicitudes] = useState(MOCK_SOLICITUDES);
-  const [cargando] = useState(false);
-  const [error] = useState(null);
+  const [solicitudes, setSolicitudes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Filtros — "tipo" se inicializa desde el query param (?tipo=Ausentismo) si viene de los botones del form
   const [tipo, setTipo] = useState(searchParams.get("tipo") || "");
   const [fecha, setFecha] = useState("");
   const [estado, setEstado] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
 
-  // Si cambia el query param (ej. el usuario navega de un botón a otro), sincroniza el filtro
   useEffect(() => {
     const tipoParam = searchParams.get("tipo");
     if (tipoParam) setTipo(tipoParam);
   }, [searchParams]);
 
-  // Paginación
-  const [paginaActual, setPaginaActual] = useState(1);
+  const authHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("access")}`,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setCargando(true);
+      setError(null);
+      try {
+        const [ausentismosRes, horasExtrasRes] = await Promise.all([
+          fetch(`${API_URL}/ausentismos/`, { headers: authHeaders() }),
+          fetch(`${API_URL}/horas-extras/`, { headers: authHeaders() }),
+        ]);
+
+        const ausentismosData = ausentismosRes.ok ? await ausentismosRes.json() : [];
+        const horasExtrasData = horasExtrasRes.ok ? await horasExtrasRes.json() : [];
+
+        const ausentismosNormalizados = ausentismosData.map((a) => ({
+          id: `ausentismo-${a.id}`,
+          fecha: a.fecha_inicio,
+          tipo: "Ausentismo",
+          motivo: a.motivo,
+          horas_extras: calcularHorasAusentismo(a.hora_inicio, a.hora_fin),
+          estado: ESTADO_LABELS[a.estado] || a.estado,
+        }));
+
+        const horasExtrasNormalizadas = horasExtrasData.map((h) => ({
+          id: `horas-extras-${h.id}`,
+          fecha: h.fecha,
+          tipo: "Horas Extras",
+          motivo: h.docente_nombre,
+          horas_extras: (
+            parseFloat(h.horas_diurnas) +
+            parseFloat(h.horas_nocturnas) +
+            parseFloat(h.horas_situacion_administrativa)
+          ).toFixed(1),
+          estado: ESTADO_LABELS[h.estado] || h.estado,
+        }));
+
+        setSolicitudes([...ausentismosNormalizados, ...horasExtrasNormalizadas]);
+      } catch (err) {
+        setError("No se pudo conectar con el servidor");
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleFiltrar = () => {
     setPaginaActual(1);
   };
 
   const handleDescargar = (id) => {
-    // 🔧 Cuando tengas backend: fetch(`/api/solicitudes-computadas/${id}/descargar/`)
-    alert(`Descargar solicitud #${id} (pendiente de conectar con backend)`);
+    // 🔧 Pendiente: no existe todavía endpoint de descarga en el backend
+    alert(`Descargar solicitud ${id} (pendiente de conectar con backend)`);
   };
 
   const solicitudesFiltradas = useMemo(() => {
@@ -200,6 +248,7 @@ export default function ConsultasyReportes() {
                   <th className="py-1 px-2 font-semibold">Fecha</th>
                   <th className="py-1 px-2 font-semibold">Tipo</th>
                   <th className="py-1 px-2 font-semibold">Motivo</th>
+                  <th className="py-1 px-2 font-semibold">Horas</th>
                   <th className="py-1 px-2 font-semibold">Estado</th>
                   <th className="py-1 px-2 font-semibold">Acciones</th>
                 </tr>

@@ -3,7 +3,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import CustomTokenObtainPairSerializer, CambiarContrasenaSerializer, UsuarioSerializer
+from .models import InstitucionEducativa, Sede
+from .serializers import (
+    CustomTokenObtainPairSerializer,
+    CambiarContrasenaSerializer,
+    UsuarioSerializer,
+    InstitucionEducativaSerializer,
+    SedeSerializer,
+)
 
 
 class LoginView(TokenObtainPairView):
@@ -26,3 +33,21 @@ class UsuarioActualView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class InstitucionEducativaListView(generics.ListAPIView):
+    queryset = InstitucionEducativa.objects.filter(activo=True)
+    serializer_class = InstitucionEducativaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class SedeListView(generics.ListAPIView):
+    serializer_class = SedeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = Sede.objects.filter(activo=True)
+        institucion_id = self.request.query_params.get("institucion_educativa")
+        if institucion_id:
+            qs = qs.filter(institucion_educativa_id=institucion_id)
+        return qs

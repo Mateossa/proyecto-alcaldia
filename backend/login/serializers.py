@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Usuario, InstitucionEducativa
+from .models import Usuario, InstitucionEducativa, Sede
 
 
 class InstitucionEducativaSerializer(serializers.ModelSerializer):
@@ -8,6 +8,10 @@ class InstitucionEducativaSerializer(serializers.ModelSerializer):
         model = InstitucionEducativa
         fields = ["id", "nombre", "codigo_dane"]
 
+class SedeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sede
+        fields = ["id", "nombre", "institucion_educativa"]
 
 class UsuarioSerializer(serializers.ModelSerializer):
     institucion_educativa = InstitucionEducativaSerializer(read_only=True)

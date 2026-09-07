@@ -13,14 +13,13 @@ class AusentismoSerializer(serializers.ModelSerializer):
         model = Ausentismo
         fields = [
             "id", "docente", "docente_nombre", "institucion_educativa",
-            "institucion_educativa_nombre", "motivo", "fecha_inicio", "fecha_fin",
-            "descripcion", "anexo", "estado", "fecha_registro",
-            "fecha_actualizacion", "revisado_por",
+            "institucion_educativa_nombre", "sede", "motivo", "fecha_inicio",
+            "fecha_fin", "hora_inicio", "hora_fin", "descripcion", "anexo",
+            "estado", "fecha_registro", "fecha_actualizacion", "revisado_por",
         ]
         read_only_fields = ["docente", "estado", "revisado_por", "fecha_registro", "fecha_actualizacion"]
 
     def create(self, validated_data):
-        # El docente logueado se asigna automáticamente, no viene del body
         request = self.context["request"]
         validated_data["docente"] = request.user
         return super().create(validated_data)
