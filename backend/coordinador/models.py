@@ -19,6 +19,10 @@ class SolicitudHorasExtras(models.Model):
     horas_nocturnas = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     horas_situacion_administrativa = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     fecha = models.DateField()
+    fecha_fin = models.DateField(null=True, blank=True)
+    hora_inicio = models.TimeField(null=True, blank=True)
+    hora_fin = models.TimeField(null=True, blank=True)
+    descripcion = models.TextField(blank=True)
     anexo = models.FileField(upload_to="horas_extras/anexos/%Y/%m/", blank=True, null=True)
     estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.PENDIENTE)
     registrado_por = models.ForeignKey(
@@ -33,4 +37,4 @@ class SolicitudHorasExtras(models.Model):
         ordering = ["-fecha_registro"]
 
     def __str__(self):
-        return f"Horas extras {self.docente.nombre_completo} — {self.fecha}"
+        return f"Horas extras {self.docente.nombre_completo} — {self.fecha}"    

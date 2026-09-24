@@ -1,9 +1,10 @@
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import InstitucionEducativa, Sede
+from .models import InstitucionEducativa, Sede, Usuario
 from .serializers import (
     CustomTokenObtainPairSerializer,
     CambiarContrasenaSerializer,
@@ -51,3 +52,26 @@ class SedeListView(generics.ListAPIView):
         if institucion_id:
             qs = qs.filter(institucion_educativa_id=institucion_id)
         return qs
+
+
+class BuscarDocenteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        numero_documento = request.query_params.get("numero_documento")
+        if not numero_documento:
+            return Response({"detail": "Debe indicar numero_documento."}, status=400)
+
+        try:
+            docente = Usuario.objects.get(
+                numero_documento=numero_documento, rol=Usuario.Rol.DOCENTE
+            )
+        except Usuario.DoesNotExist:
+            raise NotFound("No se encontró un docente con ese número de documento.")
+
+        return Response({
+            "id": docente.id,
+            "numero_documento": docente.numero_documento,
+            "nombre_completo": docente.nombre_completo,
+            "institucion_educativa": docente.institucion_educativa_id,
+        })

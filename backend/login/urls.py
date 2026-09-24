@@ -6,6 +6,7 @@ from .views import (
     UsuarioActualView,
     InstitucionEducativaListView,
     SedeListView,
+    BuscarDocenteView,
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path("login/me/", UsuarioActualView.as_view(), name="usuario-actual"),
     path("instituciones-educativas/", InstitucionEducativaListView.as_view(), name="instituciones-list"),
     path("sedes/", SedeListView.as_view(), name="sedes-list"),
+    path("docentes/buscar/", BuscarDocenteView.as_view(), name="buscar-docente"),
 ]

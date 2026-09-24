@@ -1,37 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../../../shared/components/Button";
 import CoordinadorTable from "../tables/CoordinadorTable";
 
+const API_URL = "http://127.0.0.1:8000/api";
+
 const ESTADOS = ["Pendiente", "Aprobado", "Rechazado"];
 const ITEMS_POR_PAGINA = 5;
 
-// 🔧 Datos de ejemplo mientras no hay backend.
-// Ausentismo usa fechaInicio/fechaFin. Horas Extras usa horaInicio/horaFin.
-const MOCK_AUSENTISMO = [
-  { id: 1, fechaRegistro: "2026-05-30", documento: "1128548648", motivo: "Cita Médica", tipo: "Ausentismo", fechaInicio: "2026-06-02", fechaFin: "2026-06-02", estado: "Pendiente" },
-  { id: 2, fechaRegistro: "2026-05-25", documento: "1124855688", motivo: "Cobertura de turno", tipo: "Ausentismo", fechaInicio: "2026-05-16", fechaFin: "2026-05-04", estado: "Aprobado" },
-  { id: 3, fechaRegistro: "2026-05-18", documento: "1248784562", motivo: "Incapacidad", tipo: "Ausentismo", fechaInicio: "2026-05-20", fechaFin: "2026-05-22", estado: "Pendiente" },
-  { id: 4, fechaRegistro: "2026-05-19", documento: "965895255", motivo: "Licencia Médica", tipo: "Ausentismo", fechaInicio: "2026-05-21", fechaFin: "2026-05-21", estado: "Rechazado" },
-  { id: 5, fechaRegistro: "2026-06-10", documento: "125545864", motivo: "Evento institucional", tipo: "Ausentismo", fechaInicio: "2026-12-16", fechaFin: "2026-06-20", estado: "Rechazado" },
-  { id: 6, fechaRegistro: "2026-06-03", documento: "1189578628", motivo: "Incapacidad", tipo: "Ausentismo", fechaInicio: "2026-06-05", fechaFin: "2026-06-07", estado: "Aprobado" },
-];
-
-const MOCK_HORAS_EXTRAS = [
-  { id: 7, fechaRegistro: "2026-07-10", documento: "123456789", motivo: "Revisión de informes", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
-  { id: 8, fechaRegistro: "2026-07-11", documento: "987654321", motivo: "Capacitación docente", tipo: "Horas Extras", horaInicio: "19:00", horaFin: "21:00", situacionAdministrativa: "En servicio activo", estado: "Aprobado" },
-  { id: 9, fechaRegistro: "2026-07-12", documento: "456123789", motivo: "Reunión extraordinaria", tipo: "Horas Extras", horaInicio: "17:30", horaFin: "19:00", situacionAdministrativa: "Comisión de servicios", estado: "Rechazado" },
-  { id: 10, fechaRegistro: "2026-07-13", documento: "852741963", motivo: "Actualización de plataforma", tipo: "Horas Extras", horaInicio: "20:00", horaFin: "22:00", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
-  { id: 11, fechaRegistro: "2026-07-14", documento: "963258741", motivo: "Soporte técnico nocturno", tipo: "Horas Extras", horaInicio: "21:00", horaFin: "23:00", situacionAdministrativa: "Encargo", estado: "Aprobado" },
-  { id: 12, fechaRegistro: "2026-07-15", documento: "741852963", motivo: "Revisión presupuestal", tipo: "Horas Extras", horaInicio: "18:30", horaFin: "20:30", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
-  { id: 13, fechaRegistro: "2026-07-16", documento: "159753486", motivo: "Capacitación en seguridad", tipo: "Horas Extras", horaInicio: "19:30", horaFin: "21:30", situacionAdministrativa: "Comisión de servicios", estado: "Rechazado" },
-  { id: 14, fechaRegistro: "2026-07-17", documento: "357951456", motivo: "Reunión con proveedores", tipo: "Horas Extras", horaInicio: "17:00", horaFin: "19:00", situacionAdministrativa: "En servicio activo", estado: "Aprobado" },
-  { id: 15, fechaRegistro: "2026-07-18", documento: "258963147", motivo: "Auditoría interna", tipo: "Horas Extras", horaInicio: "20:00", horaFin: "22:00", situacionAdministrativa: "Encargo", estado: "Pendiente" },
-  { id: 16, fechaRegistro: "2026-07-19", documento: "654789321", motivo: "Revisión de contratos", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", situacionAdministrativa: "En servicio activo", estado: "Aprobado" },
-  { id: 17, fechaRegistro: "2026-07-10", documento: "123456789", motivo: "Revisión de informes", tipo: "Horas Extras", horaInicio: "18:00", horaFin: "20:00", situacionAdministrativa: "En servicio activo", estado: "Pendiente" },
-  { id: 18, fechaRegistro: "2026-07-11", documento: "987654321", motivo: "Capacitación docente", tipo: "Horas Extras", horaInicio: "19:00", horaFin: "21:00", situacionAdministrativa: "Comisión de servicios", estado: "Aprobado" },
-  { id: 19, fechaRegistro: "2026-07-12", documento: "456123789", motivo: "Reunión extraordinaria", tipo: "Horas Extras", horaInicio: "17:30", horaFin: "19:00", situacionAdministrativa: "En servicio activo", estado: "Rechazado" },
-];
+const ESTADO_LABELS = {
+  PENDIENTE: "Pendiente",
+  APROBADO: "Aprobado",
+  RECHAZADO: "Rechazado",
+};
 
 const selectArrowStyle = {
   backgroundImage:
@@ -45,7 +26,7 @@ const getColumnasDisponibles = (mostrarHoras) => [
   { key: "motivo", label: "Motivo" },
   { key: "inicio", label: mostrarHoras ? "Hora Inicio" : "Fecha Inicio" },
   { key: "fin", label: mostrarHoras ? "Hora Fin" : "Fecha Fin" },
-  ...(mostrarHoras ? [{ key: "situacionAdministrativa", label: "Situación Administrativa" }] : []),
+  ...(mostrarHoras ? [{ key: "situacionAdministrativa", label: "Horas Sit. Administrativa" }] : []),
   { key: "estado", label: "Estado" },
 ];
 
@@ -56,9 +37,9 @@ export default function SolicitudesComputadas() {
   const tipoParam = searchParams.get("tipo") || "";
   const mostrarHoras = tipoParam === "Horas Extras";
 
-  const [solicitudes] = useState(mostrarHoras ? MOCK_HORAS_EXTRAS : MOCK_AUSENTISMO);
-  const [cargando] = useState(false);
-  const [error] = useState(null);
+  const [solicitudes, setSolicitudes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
 
   const [documento, setDocumento] = useState("");
   const [fecha, setFecha] = useState("");
@@ -72,6 +53,62 @@ export default function SolicitudesComputadas() {
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState(
     columnasDisponibles.reduce((acc, col) => ({ ...acc, [col.key]: true }), {})
   );
+
+  const authHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("access")}`,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setCargando(true);
+      setError(null);
+      try {
+        const endpoint = mostrarHoras ? "horas-extras" : "ausentismos";
+        const response = await fetch(`${API_URL}/${endpoint}/`, {
+          headers: authHeaders(),
+        });
+
+        if (!response.ok) {
+          setError("No se pudo conectar con el servidor");
+          setSolicitudes([]);
+          return;
+        }
+
+        const data = await response.json();
+
+        const normalizadas = mostrarHoras
+          ? data.map((h) => ({
+              id: h.id,
+              fechaRegistro: h.fecha_registro?.slice(0, 10),
+              documento: h.docente_numero_documento,
+              motivo: h.descripcion,
+              tipo: "Horas Extras",
+              horaInicio: h.hora_inicio?.slice(0, 5) || "",
+              horaFin: h.hora_fin?.slice(0, 5) || "",
+              situacionAdministrativa: h.horas_situacion_administrativa,
+              estado: ESTADO_LABELS[h.estado] || h.estado,
+            }))
+          : data.map((a) => ({
+              id: a.id,
+              fechaRegistro: a.fecha_registro?.slice(0, 10),
+              documento: a.docente_numero_documento,
+              motivo: a.motivo,
+              tipo: "Ausentismo",
+              fechaInicio: a.fecha_inicio,
+              fechaFin: a.fecha_fin,
+              estado: ESTADO_LABELS[a.estado] || a.estado,
+            }));
+
+        setSolicitudes(normalizadas);
+      } catch (err) {
+        setError("No se pudo conectar con el servidor");
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    fetchData();
+  }, [mostrarHoras]);
 
   const handleFiltrar = () => {
     setPaginaActual(1);
