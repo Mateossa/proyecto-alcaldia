@@ -1,17 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input, Select, Button, Modal } from "@/shared/components";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://127.0.0.1:8000/api";
 
+// ===== Reglas del soporte =====
+const SOPORTE_OBLIGATORIO = false;
+const SOPORTE_EXTENSIONES = ["pdf", "jpg", "jpeg", "png"];
+const SOPORTE_MAX_MB = 5;
+const SOPORTE_MAX_BYTES = SOPORTE_MAX_MB * 1024 * 1024;
+
+const validarSoporte = (archivo) => {
+  const extension = archivo.name.split(".").pop().toLowerCase();
+  if (!SOPORTE_EXTENSIONES.includes(extension)) {
+    return "El soporte debe ser un archivo PDF, JPG o PNG.";
+  }
+  if (archivo.size === 0) {
+    return "El archivo seleccionado está vacío.";
+  }
+  if (archivo.size > SOPORTE_MAX_BYTES) {
+    return `El soporte no puede superar los ${SOPORTE_MAX_MB} MB.`;
+  }
+  return "";
+};
+
+const formatearTamano = (bytes) =>
+  bytes < 1024 * 1024
+    ? `${Math.max(1, Math.round(bytes / 1024))} KB`
+    : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+
 export default function DocenteForm() {
   const navigate = useNavigate();
+  const soporteInputRef = useRef(null);
 
   const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
 
   const [serverError, setServerError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [error, setErrors] = useState({});
+  const [soporteError, setSoporteError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [instituciones, setInstituciones] = useState([]);
@@ -75,10 +102,35 @@ export default function DocenteForm() {
     fetchSedes();
   }, [formData.institucionEducativa]);
 
+  const handleQuitarSoporte = () => {
+    setFormData((prev) => ({ ...prev, soporte: null }));
+    setSoporteError("");
+    if (soporteInputRef.current) soporteInputRef.current.value = "";
+  };
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === "soporte") {
-      setFormData((prev) => ({ ...prev, soporte: files[0] }));
+      const archivo = files[0];
+
+      // El usuario canceló el diálogo de archivos
+      if (!archivo) {
+        handleQuitarSoporte();
+        return;
+      }
+
+      const mensaje = validarSoporte(archivo);
+      if (mensaje) {
+        setSoporteError(mensaje);
+        setFormData((prev) => ({ ...prev, soporte: null }));
+        // Se limpia el input para que se pueda volver a elegir el mismo archivo
+        e.target.value = "";
+        return;
+      }
+
+      setSoporteError("");
+      setFormData((prev) => ({ ...prev, soporte: archivo }));
     } else if (name === "institucionEducativa") {
       // Al cambiar de IE, se limpia la sede elegida (pertenecía a la IE anterior)
       setFormData((prev) => ({ ...prev, institucionEducativa: value, sedeCentral: "" }));
@@ -99,7 +151,10 @@ export default function DocenteForm() {
     if (!formData.tipoPermiso) newErrors.tipoPermiso = "Requerido";
     if (!formData.justificacion) newErrors.justificacion = "Requerido";
 
-    if (Object.keys(newErrors).length > 0) {
+    const soporteFaltante = SOPORTE_OBLIGATORIO && !formData.soporte;
+    if (soporteFaltante) setSoporteError("El soporte es obligatorio.");
+
+    if (Object.keys(newErrors).length > 0 || soporteFaltante) {
       setErrors(newErrors);
       return;
     }
@@ -205,7 +260,15 @@ export default function DocenteForm() {
           <div />
         </div>
 
-        <input type="file" name="soporte" accept=".pdf,.jpg,.jpeg,.png" onChange={handleChange} className="hidden" id="soporteInput" />
+        <input
+          type="file"
+          name="soporte"
+          accept=".pdf,.jpg,.jpeg,.png"
+          onChange={handleChange}
+          className="hidden"
+          id="soporteInput"
+          ref={soporteInputRef}
+        />
 
         <div className="flex gap-3 justify-between items-center mt-1">
           <div className="flex gap-3">
@@ -215,16 +278,37 @@ export default function DocenteForm() {
             <Button variant="secondary" size="sm" type="button" onClick={() => navigate(-1)}>Cancelar</Button>
           </div>
           <div className="flex gap-3">
-            <Button variant="secondary" size="sm" type="button" onClick={() => document.getElementById("soporteInput").click()}>
+            <Button variant="secondary" size="sm" type="button" onClick={() => soporteInputRef.current?.click()}>
               Agregar Soporte
             </Button>
             <Button variant="primary" size="sm" type="button" onClick={() => navigate("/consultas-y-reportes?tipo=Ausentismo")}>
               <span className="whitespace-nowrap">Consulta Ausentismos</span>
             </Button>
-            <Button variant="primary" size="sm" type="button" onClick={() => navigate("/consultas-y-reportes?tipo=Horas Extras")}>
-              <span className="whitespace-nowrap">Consulta Horas Extras</span>
-            </Button>
           </div>
+        </div>
+
+        {/* Estado del soporte: error, archivo elegido o ayuda */}
+        <div className="mt-3 min-h-[1rem] text-xs">
+          {soporteError ? (
+            <p className="text-red-700">{soporteError}</p>
+          ) : formData.soporte ? (
+            <p className="text-brand-hover flex items-center gap-2">
+              <span>
+                Soporte: {formData.soporte.name} ({formatearTamano(formData.soporte.size)})
+              </span>
+              <button
+                type="button"
+                onClick={handleQuitarSoporte}
+                className="underline hover:font-bold"
+              >
+                Quitar
+              </button>
+            </p>
+          ) : (
+            <p className="text-text-muted">
+              Formatos permitidos: PDF, JPG o PNG. Máximo {SOPORTE_MAX_MB} MB.
+            </p>
+          )}
         </div>
       </form>
 

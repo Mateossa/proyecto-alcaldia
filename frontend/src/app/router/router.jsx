@@ -22,7 +22,7 @@ import CoordinadorReportesPage from "../../features/coordinador/pages/Coordinado
 import TalentoHumanoPage from "../../features/talento-humano/pages/TalentoHumanoPage";
 import ConfiguracionPage from "../../features/talento-humano/pages/ConfiguracionPage";
 import CrearUsuarioPage from "../../features/talento-humano/pages/CrearUsuarioPage";
-// import AjustarTopesPage from "../../features/talento-humano/pages/AjustarTopesPage";
+import AjustarTopesPage from "../../features/talento-humano/pages/AjustarTopesPage";
 import AjustarTopesDocentesPage from "../../features/talento-humano/pages/AjustarTopesDocentesPage";
 
 // ================= TÉCNICO TH =================
@@ -93,10 +93,10 @@ const router = createBrowserRouter([
         path: "talento-humano/configuracion/crear-usuario",
         element: <CrearUsuarioPage />,
       },
-      // {
-      //   path: "talento-humano/configuracion/ajustar-topes",
-      //   element: <AjustarTopesPage />,
-      // },
+      {
+        path: "talento-humano/configuracion/ajustar-topes",
+        element: <AjustarTopesPage />,
+      },
       {
         path: "talento-humano/configuracion/ajustar-topes-docentes",
         element: <AjustarTopesDocentesPage />,

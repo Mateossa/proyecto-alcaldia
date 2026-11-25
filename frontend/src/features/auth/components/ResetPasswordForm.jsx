@@ -101,10 +101,11 @@ export default function ResetPasswordForm() {
           <form onSubmit={handleVerificarCodigo}>
             <div className="grid text-main justify-items-center">
               <UserRoundKey className="flex items-center h-12 w-12 stroke-brand-hover" />
-              <h1 className="text-brand-hover font-extrabold text-info-general">
+              <h1 className="text-brand-hover font-extrabold text-info-general"
+                  style={{ color: "var(--color-brand-fort)", lineHeight: "1.25" }} >
                 Restablecimiento de contraseña
               </h1>
-              <p className="text-secondary text-info-general text-center font-light py-6">
+              <p className="text-secondary text-info-general text-center font-light pt-2x| py-6">
                 Ingresa el <strong className="font-bold">código</strong> enviado a
                 tu correo electrónico
               </p>
@@ -126,9 +127,10 @@ export default function ResetPasswordForm() {
           <form onSubmit={handleCambiarContrasena}>
             <div className="grid text-main justify-items-center">
               <UserRoundKey className="flex items-center h-12 w-12 stroke-brand-hover" />
-              <h1 className="text-brand-hover font-extrabold text-info-general">
-                Nueva contraseña
-              </h1>
+              <h1 className="text-general-title font-extrabold text-center leading-tight"
+                style={{ color: "var(--color-brand-fort)" }} >
+                Nueva Contraseña
+            </h1>
               <p className="text-secondary text-info-general text-center font-light py-6">
                 Ingresa tu nueva contraseña
               </p>

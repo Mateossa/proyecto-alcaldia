@@ -32,7 +32,7 @@ export default function RectorTable({
             <th className="py-1.5 px-2 font-semibold">Fecha Fin</th>
             <th className="py-1.5 px-2 font-semibold">Anexo</th>
             <th className="py-1.5 px-2 font-semibold">Estado</th>
-            <th className="py-1.5 px-2 font-semibold">Acciones</th>
+            <th className="py-1.5 px-2 font-semibold">Formato Ausentismo</th>
           </tr>
         </thead>
         <tbody>
