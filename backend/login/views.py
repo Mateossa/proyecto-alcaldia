@@ -1,10 +1,21 @@
+import logging
+
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import status, generics, permissions
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import NotFound
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import InstitucionEducativa, Sede, Usuario
+from .recuperacion import (
+    MENSAJE_CODIGO_INVALIDO,
+    CodigoInvalido,
+    buscar_usuario_por_email,
+    generar_y_enviar_codigo,
+    validar_codigo,
+)
 from .serializers import (
     CustomTokenObtainPairSerializer,
     CambiarContrasenaSerializer,
@@ -12,6 +23,8 @@ from .serializers import (
     InstitucionEducativaSerializer,
     SedeSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class LoginView(TokenObtainPairView):
@@ -75,3 +88,94 @@ class BuscarDocenteView(APIView):
             "nombre_completo": docente.nombre_completo,
             "institucion_educativa": docente.institucion_educativa_id,
         })
+
+
+# ===== Restablecer contraseña con código (sin sesión iniciada) =====
+
+def _usuario_y_codigo(request):
+    """Lee email y código del body. Devuelve (usuario, codigo); usuario es None si algo no es válido."""
+    email = str(request.data.get("email", "")).strip()
+    codigo = str(request.data.get("codigo", "")).strip()
+    if not email or len(codigo) != 6 or not codigo.isdigit():
+        return None, ""
+    return buscar_usuario_por_email(email), codigo
+
+
+class SolicitarCodigoView(APIView):
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        email = str(request.data.get("email", "")).strip()
+        if not email:
+            return Response(
+                {"error": "Por favor ingresa tu correo electrónico."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        usuario = buscar_usuario_por_email(email)
+        if usuario is not None:
+            try:
+                generar_y_enviar_codigo(usuario)
+            except Exception:
+                # El error queda en la terminal del backend, la persona no lo ve
+                logger.exception("No se pudo enviar el código de recuperación")
+
+        # Misma respuesta exista o no el correo, para no revelar quién está registrado
+        return Response(
+            {"detail": "Si el correo está registrado, te enviamos un código de 6 dígitos."}
+        )
+
+
+class VerificarCodigoView(APIView):
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        usuario, codigo = _usuario_y_codigo(request)
+        if usuario is None:
+            return Response(
+                {"error": MENSAJE_CODIGO_INVALIDO}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            validar_codigo(usuario, codigo)
+        except CodigoInvalido as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"detail": "Código válido."})
+
+
+class CambiarContrasenaConCodigoView(APIView):
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        usuario, codigo = _usuario_y_codigo(request)
+        nueva = str(request.data.get("nueva_contrasena", ""))
+
+        if usuario is None:
+            return Response(
+                {"error": MENSAJE_CODIGO_INVALIDO}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            validar_codigo(usuario, codigo)
+        except CodigoInvalido as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            validate_password(nueva, usuario)
+        except DjangoValidationError as exc:
+            return Response(
+                {"error": " ".join(exc.messages)}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        usuario.set_password(nueva)
+        usuario.debe_cambiar_contrasena = False
+        usuario.save(update_fields=["password", "debe_cambiar_contrasena"])
+
+        # El código ya se usó: ningún otro código pendiente sirve
+        usuario.codigos_recuperacion.filter(usado=False).update(usado=True)
+
+        return Response({"detail": "Contraseña actualizada correctamente."})

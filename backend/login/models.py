@@ -131,3 +131,23 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     @property
     def nombre_completo(self):
         return f"{self.nombres} {self.apellidos}"
+
+
+class CodigoRecuperacion(models.Model):
+    """Código de 6 dígitos para restablecer la contraseña (se guarda cifrado)."""
+
+    usuario = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, related_name="codigos_recuperacion"
+    )
+    codigo_hash = models.CharField(max_length=255,null=True,blank=True)
+    creado = models.DateTimeField(auto_now_add=True)
+    expira = models.DateTimeField(null=True,blank=True)
+    intentos = models.PositiveSmallIntegerField(default=0)
+    usado = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = "codigos_recuperacion"
+        ordering = ["-creado"]
+
+    def __str__(self):
+        return f"Código de {self.usuario.numero_documento} ({self.creado:%Y-%m-%d %H:%M})"

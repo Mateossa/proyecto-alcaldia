@@ -7,6 +7,9 @@ from .views import (
     InstitucionEducativaListView,
     SedeListView,
     BuscarDocenteView,
+    SolicitarCodigoView,
+    VerificarCodigoView,
+    CambiarContrasenaConCodigoView,
 )
 
 urlpatterns = [
@@ -17,4 +20,9 @@ urlpatterns = [
     path("instituciones-educativas/", InstitucionEducativaListView.as_view(), name="instituciones-list"),
     path("sedes/", SedeListView.as_view(), name="sedes-list"),
     path("docentes/buscar/", BuscarDocenteView.as_view(), name="buscar-docente"),
+
+    # Restablecer contraseña con código enviado al correo
+    path("auth/solicitar-codigo/", SolicitarCodigoView.as_view(), name="solicitar-codigo"),
+    path("auth/verificar-codigo/", VerificarCodigoView.as_view(), name="verificar-codigo"),
+    path("auth/cambiar-contrasena/", CambiarContrasenaConCodigoView.as_view(), name="cambiar-contrasena-con-codigo"),
 ]
